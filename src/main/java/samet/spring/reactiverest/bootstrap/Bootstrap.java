@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import samet.spring.reactiverest.repositories.AuthorRepository;
-import samet.spring.reactiverest.repositories.BookAuthorsRepository;
+import samet.spring.reactiverest.repositories.AuthorBooksRepository;
 import samet.spring.reactiverest.repositories.BookRepository;
 import samet.spring.reactiverest.models.Author;
 import samet.spring.reactiverest.models.Book;
-import samet.spring.reactiverest.models.BookAuthors;
+import samet.spring.reactiverest.models.AuthorBooks;
 
 
 @Component
@@ -21,15 +21,15 @@ import samet.spring.reactiverest.models.BookAuthors;
 public class Bootstrap implements CommandLineRunner {
 
     private BookRepository bookRepository;
-    private BookAuthorsRepository bookAuthorsRepository;
+    private AuthorBooksRepository authorBooksRepository;
     private AuthorRepository authorRepository;
 
     @Autowired
     public Bootstrap(BookRepository bookRepository,
-            BookAuthorsRepository bookAuthorsRepository,
+            AuthorBooksRepository authorBooksRepository,
             AuthorRepository authorRepository) {
         this.bookRepository = bookRepository;
-        this.bookAuthorsRepository = bookAuthorsRepository;
+        this.authorBooksRepository = authorBooksRepository;
         this.authorRepository = authorRepository;
     }
 
@@ -48,49 +48,43 @@ public class Bootstrap implements CommandLineRunner {
 
     private void loadAuthors() {
 
-        // var authors = List.of(
-        //     Author.builder().name("Joe 1").build(),
-        //     Author.builder().name("Joe 2").build(),
-        //     Author.builder().name("Joe 3").build()
-        // );
-
         // save books
-        var books = List.of(
-            Book.builder().name("book 12").build(),
-            Book.builder().name("book 23").build(),
-            Book.builder().name("book 31").build()
+        var authors = List.of(
+            Author.builder().name("author 12").build(),
+            Author.builder().name("author 23").build(),
+            Author.builder().name("author 31").build()
         );
 
-        var bookList = bookRepository.saveAll(books).collectList().block();
+        var authorList = authorRepository.saveAll(authors).collectList().block();
 
-        var bookAuthors = new ArrayList<BookAuthors>();
-        bookList.forEach(
-            book -> bookAuthors.add(BookAuthors.builder().book(book).build())
+        var authorBooks = new ArrayList<AuthorBooks>();
+        authorList.forEach(
+            author -> authorBooks.add(AuthorBooks.builder().author(author).build())
         );
 
         // save authors
-        var authors = List.of(
-            Author.builder().name("Joe 1").build(),
-            Author.builder().name("Joe 1").build(),
-            Author.builder().name("Joe 3").build()
+        var books = List.of(
+            Book.builder().name("Book 1").build(),
+            Book.builder().name("Book 1").build(),
+            Book.builder().name("Book 3").build()
         );
 
-        authors.get(0).addBook(bookList.get(0));
-        authors.get(0).addBook(bookList.get(1));
+        books.get(0).addAuthor(authorList.get(0));
+        books.get(0).addAuthor(authorList.get(1));
 
-        authors.get(1).addBook(bookList.get(0));
-        authors.get(1).addBook(bookList.get(1));
+        books.get(1).addAuthor(authorList.get(0));
+        books.get(1).addAuthor(authorList.get(1));
 
-        authorRepository.saveAll(authors).collectList().block();
+        bookRepository.saveAll(books).collectList().block();
 
-        // save bookAuthors
-        bookAuthors.get(0).addAuthor(authors.get(0));
-        bookAuthors.get(0).addAuthor(authors.get(1));
+        // save authorBooks
+        authorBooks.get(0).addBook(books.get(0));
+        authorBooks.get(0).addBook(books.get(1));
 
-        bookAuthors.get(1).addAuthor(authors.get(0));
-        bookAuthors.get(1).addAuthor(authors.get(1));
+        authorBooks.get(1).addBook(books.get(0));
+        authorBooks.get(1).addBook(books.get(1));
 
-        bookAuthorsRepository.saveAll(bookAuthors).collectList().block();
+        authorBooksRepository.saveAll(authorBooks).collectList().block();
 
 
         // log results
@@ -100,10 +94,10 @@ public class Bootstrap implements CommandLineRunner {
         log.info("Loaded Authors: " + authorRepository.count().block());
         log.info(authorRepository.findAll().collectList().block().toString());
 
-        log.info("BookAuthors: " + bookAuthorsRepository.count().block());
-        log.info(bookAuthorsRepository.findAll().collectList().block().toString());
+        log.info("AuthorBooks: " + authorBooksRepository.count().block());
+        log.info(authorBooksRepository.findAll().collectList().block().toString());
 
-        log.info(bookAuthorsRepository.findByBook(bookList.get(0)).block().toString());
+        log.info(authorBooksRepository.findByAuthor(authorList.get(0)).block().toString());
 
     }
 }

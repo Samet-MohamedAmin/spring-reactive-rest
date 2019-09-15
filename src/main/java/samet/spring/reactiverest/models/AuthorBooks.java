@@ -21,36 +21,36 @@ import reactor.core.publisher.Mono;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookAuthors {
+public class AuthorBooks {
 
     @Id
     private String id;
 
     @DBRef
-    private Book book;
+    private Author author;
 
     @DBRef
     @Builder.Default
-    private Set<Author> authors = new HashSet<>();
+    private Set<Book> books = new HashSet<>();
 
 
-    public void addAuthor(Author author) {
+    public void addBook(Book book) {
 
-        authors.add(author);
+        books.add(book);
     }
 
-    public void addAuthor(Mono<Author> author) {
+    public void addBook(Mono<Book> book) {
 
-        authors.add(author.block());
+        books.add(book.block());
     }
 
-    public void addAuthorList(Collection<Author> authorList) {
+    public void addBookList(Collection<Book> bookList) {
 
-        authors.addAll(authorList);
+        books.addAll(bookList);
     }
 
-    public void addAuthorList(Flux<Author> authorList) {
+    public void addBookList(Flux<Book> bookList) {
 
-        authors.addAll(authorList.collectList().block());
+        books.addAll(bookList.collectList().block());
     }
 }

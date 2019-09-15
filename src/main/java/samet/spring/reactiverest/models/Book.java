@@ -1,13 +1,19 @@
 package samet.spring.reactiverest.models;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 
 @Data
@@ -22,21 +28,29 @@ public class Book implements BaseEntity {
 
     private String name;
 
-    // @DBRef
-    // @Builder.Default
-    // private Set<Author> authors = new HashSet<>();
+    @DBRef
+    @Builder.Default
+    private Set<Author> authors = new HashSet<>();
 
-    // public void addAuthor(Mono<Author> author) {
+    public void addAuthor(Author book) {
 
-    //     Author theAuthor = author.block();
-    //     theAuthor.addBook(Mono.just(this));
-    //     authors.add(author.block());
-    // }
+        authors.add(book);
+    }
 
-    // public void addBookList(Flux<Author> authorList) {
+    public void addAuthor(Mono<Author> book) {
 
-    //     authors.addAll(authorList.collectList().block());
-    // }
+        authors.add(book.block());
+    }
+
+    public void addAuthorList(Collection<Author> bookList) {
+
+        authors.addAll(bookList);
+    }
+
+    public void addAuthorList(Flux<Author> bookList) {
+
+        authors.addAll(bookList.collectList().block());
+    }
 
 }
 
