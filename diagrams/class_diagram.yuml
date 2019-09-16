@@ -1,0 +1,29 @@
+// {type: class}
+// {direction: topDown}
+// {generate: false}
+
+[<<Interface>>; BaseEntity getId(); setId(id)]
+[<<enumeration>>; OrderStatus NEW; HOLD; SHIPPED; DELIVERED]
+
+// [Book id; name; authors; price | addAuthor(author); addAuthorList(authors)]
+// [LineItem id; book; quantity; price]
+// [Store id; items | addLineItem()]
+// [Author id; name;]
+// [AuthorBooks id; author; books | addBook(book); addBookList(books)]
+// [Client id; name; address]
+// [ShoppingCart id; items | addLineItem()]
+// [Order id; shipped; ordered; status; address; items; totalPrice; | setLineItems()]
+
+
+[Book]-*[Author]
+[LineItem]++-1[Book]
+[Store]-*[LineItem]
+[AuthorBooks]++-1[Author]
+[AuthorBooks]-*[Book]
+[ShoppingCart]<>-*[LineItem]
+[ShoppingCart]-++[Client]
+[Order]-++[Client]
+[Order]-*[LineItem]
+
+[AuthorBooks]-[note: added to avoid mongodb circular ref{bg:cornsilk}]
+

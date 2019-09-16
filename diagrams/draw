@@ -1,0 +1,12 @@
+#! /bin/bash
+
+type=png
+[ -z $1 ] || type=$1 
+# available style options: scruffy, nofunky, plain
+style=scruffy
+for file in $(ls *.yuml)
+do
+    basename="${file%.*}"
+    filename="$basename.$type"
+    yuml -i "$file" -s $style -o "$type/$filename"
+done
