@@ -1,13 +1,12 @@
 package samet.spring.reactiverest.models;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,7 +40,7 @@ public class AuthorBooks {
 
     public void addBook(Mono<Book> book) {
 
-        books.add(book.block());
+        addBook(book.block());
     }
 
     public void addBookList(Collection<Book> bookList) {
@@ -51,6 +50,6 @@ public class AuthorBooks {
 
     public void addBookList(Flux<Book> bookList) {
 
-        books.addAll(bookList.collectList().block());
+        addBookList(bookList.collectList().block());
     }
 }

@@ -39,7 +39,7 @@ public class Book implements BaseEntity {
 
     public void addAuthor(Mono<Author> book) {
 
-        authors.add(book.block());
+        addAuthor(book.block());
     }
 
     public void addAuthorList(Collection<Author> bookList) {
@@ -49,7 +49,7 @@ public class Book implements BaseEntity {
 
     public void addAuthorList(Flux<Author> bookList) {
 
-        authors.addAll(bookList.collectList().block());
+        addAuthorList(bookList.collectList().block());
     }
 
 }

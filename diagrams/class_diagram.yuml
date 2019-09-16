@@ -5,12 +5,12 @@
 [<<Interface>>; BaseEntity getId(); setId(id)]
 [<<enumeration>>; OrderStatus NEW; HOLD; SHIPPED; DELIVERED]
 
-# [Book id; name; authors; price | addAuthor(author); addAuthorList(authors)]
-# [Store id; items | addLineItem()]
-# [Author id; name;]
-# [AuthorBooks id; author; books | addBook(book); addBookList(books)]
-# [Client id; name; address]
-# [Order id; shipped; ordered; status; address; items; totalPrice; | setLineItems()]
+// [Book id; name; authors; price | addAuthor(author); addAuthorList(authors)]
+// [Store id; items | addLineItem()]
+// [Author id; name;]
+// [AuthorBooks id; author; books | addBook(book); addBookList(books)]
+// [Client id; name; address]
+// [Order id; shipped; ordered; status; address; items; totalPrice; | setLineItems()]
 
 
 [Book]-*[Author]
