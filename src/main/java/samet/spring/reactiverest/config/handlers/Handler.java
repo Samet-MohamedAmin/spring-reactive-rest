@@ -12,7 +12,7 @@ public interface Handler {
     public Mono<ServerResponse> getById(ServerRequest request);
     public Mono<ServerResponse> create(ServerRequest request);
     public Mono<ServerResponse> update(ServerRequest request);
-    public Mono<ServerResponse> patch(ServerRequest request);
+    // public Mono<ServerResponse> patch(ServerRequest request);
 
     public static String getApiBase() {
 

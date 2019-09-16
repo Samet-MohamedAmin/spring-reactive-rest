@@ -65,17 +65,17 @@ public class EntityHandler<E extends BaseEntity> implements Handler {
         return ServerResponse.accepted().body(result, theClass);
     }
 
-    public Mono<ServerResponse> patch(ServerRequest request) {
+    // public Mono<ServerResponse> patch(ServerRequest request) {
 
-        String id = request.pathVariable("id");
-        var newEntity = request.bodyToMono(theClass);
-        var foundEntity = entityRepository
-                            .findById(id)
-                            .flatMap(entity  -> {
-                                entity.setName(newEntity.block().getName());
-                                return Mono.just(entity);
-                            });
+    //     String id = request.pathVariable("id");
+    //     var newEntity = request.bodyToMono(theClass);
+    //     var foundEntity = entityRepository
+    //                         .findById(id)
+    //                         .flatMap(entity  -> {
+    //                             entity.setName(newEntity.block().getName());
+    //                             return Mono.just(entity);
+    //                         });
 
-        return ServerResponse.accepted().body(entityRepository.saveAll(foundEntity), theClass);
-    }
+    //     return ServerResponse.accepted().body(entityRepository.saveAll(foundEntity), theClass);
+    // }
 }

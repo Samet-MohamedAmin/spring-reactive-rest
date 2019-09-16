@@ -50,8 +50,8 @@ public class BookHandler implements Handler {
         return handler.update(request);
     }
 
-    public Mono<ServerResponse> patch(ServerRequest request) {
+    // public Mono<ServerResponse> patch(ServerRequest request) {
 
-        return handler.patch(request);
-    }
+    //     return handler.patch(request);
+    // }
 }

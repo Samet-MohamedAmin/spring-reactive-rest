@@ -1,8 +1,11 @@
 package samet.spring.reactiverest.config;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -12,11 +15,6 @@ import samet.spring.reactiverest.config.handlers.BookHandler;
 import samet.spring.reactiverest.config.handlers.Handler;
 import samet.spring.reactiverest.repositories.AuthorRepository;
 import samet.spring.reactiverest.repositories.BookRepository;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 
 
 
@@ -51,7 +49,7 @@ public class WebConfig {
                     .GET(authorUrl + "/{id}", JSON, authorHandler::getById)
                     .POST(authorUrl, JSON, authorHandler::create)
                     .PUT(authorUrl + "/{id}", JSON, authorHandler::update)
-                    .PATCH(authorUrl + "/{id}", JSON, authorHandler::patch)
+                    // .PATCH(authorUrl + "/{id}", JSON, authorHandler::patch)
                 .build();
     }
 
@@ -67,7 +65,7 @@ public class WebConfig {
                     .GET(booksUrl + "/{id}", JSON, bookHandler::getById)
                     .POST(booksUrl, JSON, bookHandler::create)
                     .PUT(booksUrl + "/{id}", JSON, bookHandler::update)
-                    .PATCH(booksUrl + "/{id}", JSON, bookHandler::patch)
+                    // .PATCH(booksUrl + "/{id}", JSON, bookHandler::patch)
                 .build();
     }
 }
