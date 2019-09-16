@@ -52,16 +52,4 @@ public class AuthorBooks implements BaseEntity{
 
         addBookList(bookList.collectList().block());
     }
-
-    @Override
-    public String getName() {
-
-        throw new RuntimeException("CANT'T USE THIS METHOD");
-    }
-
-    @Override
-    public void setName(String id) throws RuntimeException {
-
-        throw new RuntimeException("CANT'T USE THIS METHOD");
-    }
 }
