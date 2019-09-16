@@ -1,6 +1,5 @@
 package samet.spring.reactiverest.services.basic;
 
-import org.reactivestreams.Publisher;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 
 import reactor.core.publisher.Flux;
@@ -36,7 +35,7 @@ public class EntityServiceImpl<E extends BaseEntity, ID> implements EntityServic
     }
 
     @Override
-    public Flux<E> saveAll(Publisher<E> entityStream) {
+    public Flux<E> saveAll(Flux<E> entityStream) {
 
         return repository.saveAll(entityStream);
     }
@@ -52,6 +51,12 @@ public class EntityServiceImpl<E extends BaseEntity, ID> implements EntityServic
         // }
 
         return null;
+    }
+
+    @Override
+    public Mono<Long> count() {
+
+        return repository.count();
     }
 
 }

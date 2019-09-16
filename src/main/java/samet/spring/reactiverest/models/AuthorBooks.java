@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthorBooks {
+public class AuthorBooks implements BaseEntity{
 
     @Id
     private String id;
@@ -51,5 +51,17 @@ public class AuthorBooks {
     public void addBookList(Flux<Book> bookList) {
 
         addBookList(bookList.collectList().block());
+    }
+
+    @Override
+    public String getName() {
+
+        throw new RuntimeException("CANT'T USE THIS METHOD");
+    }
+
+    @Override
+    public void setName(String id) throws RuntimeException {
+
+        throw new RuntimeException("CANT'T USE THIS METHOD");
     }
 }

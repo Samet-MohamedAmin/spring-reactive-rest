@@ -1,6 +1,5 @@
 package samet.spring.reactiverest.bootstrap;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,29 +7,30 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
-import samet.spring.reactiverest.repositories.AuthorRepository;
-import samet.spring.reactiverest.repositories.AuthorBooksRepository;
-import samet.spring.reactiverest.repositories.BookRepository;
+import reactor.core.publisher.Flux;
 import samet.spring.reactiverest.models.Author;
 import samet.spring.reactiverest.models.Book;
-import samet.spring.reactiverest.models.AuthorBooks;
+import samet.spring.reactiverest.services.AuthorBooksService;
+import samet.spring.reactiverest.services.AuthorService;
+import samet.spring.reactiverest.services.BookService;
 
 
 @Component
 @Slf4j
 public class Bootstrap implements CommandLineRunner {
 
-    private BookRepository bookRepository;
-    private AuthorBooksRepository authorBooksRepository;
-    private AuthorRepository authorRepository;
+    private BookService bookService;
+    private AuthorBooksService authorBooksService;
+    private AuthorService authorService;
 
     @Autowired
-    public Bootstrap(BookRepository bookRepository,
-            AuthorBooksRepository authorBooksRepository,
-            AuthorRepository authorRepository) {
-        this.bookRepository = bookRepository;
-        this.authorBooksRepository = authorBooksRepository;
-        this.authorRepository = authorRepository;
+    public Bootstrap(
+            BookService bookService,
+            AuthorBooksService authorBooksService,
+            AuthorService authorService) {
+        this.bookService = bookService;
+        this.authorBooksService = authorBooksService;
+        this.authorService = authorService;
     }
 
     @Override
@@ -38,29 +38,24 @@ public class Bootstrap implements CommandLineRunner {
 
         // testReactive();
 
-        if(bookRepository.count().block() == 0){
+        log.info("#### LOADING DATA ON BOOTSTRAP #####");
 
-            log.info("#### LOADING DATA ON BOOTSTRAP #####");
+        if(authorService.count().block() == 0){
 
             loadAuthors();
         }
+
+        if(bookService.count().block() == 0){
+
+            loadBooks();
+        }
     }
 
-    private void loadAuthors() {
+    private void loadBooks() {
 
-        // save books
-        var authors = List.of(
-            Author.builder().name("author 12").build(),
-            Author.builder().name("author 23").build(),
-            Author.builder().name("author 31").build()
-        );
+        log.info("LOADING BOOKS");
 
-        var authorList = authorRepository.saveAll(authors).collectList().block();
-
-        var authorBooks = new ArrayList<AuthorBooks>();
-        authorList.forEach(
-            author -> authorBooks.add(AuthorBooks.builder().author(author).build())
-        );
+        var authorList = authorService.findAll().collectList().block();
 
         // save authors
         var books = List.of(
@@ -69,35 +64,35 @@ public class Bootstrap implements CommandLineRunner {
             Book.builder().name("Book 3").build()
         );
 
-        books.get(0).addAuthor(authorList.get(0));
-        books.get(0).addAuthor(authorList.get(1));
+        bookService.addAuthor(books.get(0), authorList.get(0)).block();
+        bookService.addAuthor(books.get(0), authorList.get(1)).block();
 
-        books.get(1).addAuthor(authorList.get(0));
-        books.get(1).addAuthor(authorList.get(1));
+        bookService.addAuthor(books.get(1), authorList.get(0)).block();
+        bookService.addAuthor(books.get(1), authorList.get(1)).block();
 
-        bookRepository.saveAll(books).collectList().block();
+        log.info("Loaded Books: " + bookService.count().block());
+        log.info(bookService.findAll().collectList().block().toString());
 
-        // save authorBooks
-        authorBooks.get(0).addBook(books.get(0));
-        authorBooks.get(0).addBook(books.get(1));
+        log.info("AuthorBooks: " + authorBooksService.count().block());
+        log.info(authorBooksService.findAll().collectList().block().toString());
+    }
 
-        authorBooks.get(1).addBook(books.get(0));
-        authorBooks.get(1).addBook(books.get(1));
+    private void loadAuthors() {
 
-        authorBooksRepository.saveAll(authorBooks).collectList().block();
+        log.info("LOADING AUTHORS");
 
+        var authors = Flux.just(
+            Author.builder().name("author 12").build(),
+            Author.builder().name("author 23").build(),
+            Author.builder().name("author 31").build()
+        );
 
-        // log results
-        log.info("Loaded Books: " + bookRepository.count().block());
-        log.info(bookRepository.findAll().collectList().block().toString());
+        authorService.saveAll(authors).collectList().block();
 
-        log.info("Loaded Authors: " + authorRepository.count().block());
-        log.info(authorRepository.findAll().collectList().block().toString());
+        log.info("Loaded Authors: " + authorService.count().block());
+        log.info(authorService.findAll().collectList().block().toString());
 
-        log.info("AuthorBooks: " + authorBooksRepository.count().block());
-        log.info(authorBooksRepository.findAll().collectList().block().toString());
-
-        log.info(authorBooksRepository.findByAuthor(authorList.get(0)).block().toString());
-
+        log.info("AuthorBooks: " + authorBooksService.count().block());
+        log.info(authorBooksService.findAll().collectList().block().toString());
     }
 }

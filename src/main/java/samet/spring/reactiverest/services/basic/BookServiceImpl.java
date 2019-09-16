@@ -1,24 +1,27 @@
 package samet.spring.reactiverest.services.basic;
 
-import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import samet.spring.reactiverest.repositories.BookRepository;
-import samet.spring.reactiverest.services.BookService;
+import samet.spring.reactiverest.models.Author;
 import samet.spring.reactiverest.models.Book;
+import samet.spring.reactiverest.repositories.BookRepository;
+import samet.spring.reactiverest.services.AuthorBooksService;
+import samet.spring.reactiverest.services.BookService;
 import samet.spring.reactiverest.services.EntityService;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private BookRepository repository;
+    private AuthorBooksService authorBooksService;
     private EntityService<Book, String> service;
 
-    BookServiceImpl(BookRepository repository) {
+    BookServiceImpl(BookRepository repository, AuthorBooksService authorBooksService) {
 
         this.repository = repository;
+        this.authorBooksService = authorBooksService;
         service = new EntityServiceImpl<>(this.repository);
     }
 
@@ -41,7 +44,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public Flux<Book> saveAll(Publisher<Book> entityStream) {
+    public Flux<Book> saveAll(Flux<Book> entityStream) {
 
         return service.saveAll(entityStream);
     }
@@ -50,6 +53,21 @@ public class BookServiceImpl implements BookService {
     public Mono<Book> updateName(String id, Book entity) {
 
         return service.updateName(id, entity);
+    }
+
+    @Override
+    public Mono<Long> count() {
+
+        return service.count();
+    }
+
+    @Override
+    public Mono<Book> addAuthor(Book book, Author author) {
+        
+        book.addAuthor(author);
+        save(book).block();
+        authorBooksService.addAuthor(author, book).block();
+        return Mono.just(book);
     }
 }
 

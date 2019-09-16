@@ -1,6 +1,5 @@
 package samet.spring.reactiverest.services;
 
-import org.reactivestreams.Publisher;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,8 +13,10 @@ public interface EntityService<E extends BaseEntity, ID> {
 
     Mono<E> save(E entity);
     
-    Flux<E> saveAll(Publisher<E> entityStream);
+    Flux<E> saveAll(Flux<E> entityStream);
 
     Mono<E> updateName(ID id, E entity);
+
+    Mono<Long> count();
 
 }
