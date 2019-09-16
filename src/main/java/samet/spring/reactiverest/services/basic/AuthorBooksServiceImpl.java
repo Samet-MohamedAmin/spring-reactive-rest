@@ -48,12 +48,6 @@ public class AuthorBooksServiceImpl implements AuthorBooksService {
     }
 
     @Override
-    public Mono<AuthorBooks> updateName(String id, AuthorBooks entity) throws RuntimeException {
-
-        throw new RuntimeException("CANT'T USE THIS METHOD");
-    }
-
-    @Override
     public Mono<Long> count() {
 
         return service.count();

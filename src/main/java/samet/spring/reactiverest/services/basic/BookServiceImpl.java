@@ -52,7 +52,14 @@ public class BookServiceImpl implements BookService {
     @Override
     public Mono<Book> updateName(String id, Book entity) {
 
-        return service.updateName(id, entity);
+        // Author foundAuthor = authorService.findById(id).block();
+
+        // if(foundAuthor.getName() != author.getName()){
+        //     foundAuthor.setName(author.getName());
+        //     return authorService.save(foundAuthor);
+        // }
+
+        return null;
     }
 
     @Override

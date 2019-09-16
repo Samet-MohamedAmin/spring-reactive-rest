@@ -68,7 +68,14 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Mono<Author> updateName(String id, Author entity) {
 
-        return service.updateName(id, entity);
+        // Author foundAuthor = authorService.findById(id).block();
+
+        // if(foundAuthor.getName() != author.getName()){
+        //     foundAuthor.setName(author.getName());
+        //     return authorService.save(foundAuthor);
+        // }
+
+        return null;
     }
 
     @Override

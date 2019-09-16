@@ -14,6 +14,6 @@ public interface BaseEntity {
         return false;
     }
 
-    String getName();
-    void setName(String id);
+    // String getName();
+    // void setName(String id);
 }

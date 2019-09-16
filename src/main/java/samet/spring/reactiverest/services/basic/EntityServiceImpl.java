@@ -41,19 +41,6 @@ public class EntityServiceImpl<E extends BaseEntity, ID> implements EntityServic
     }
 
     @Override
-    public Mono<E> updateName(ID id, E entity) {
-
-        // Author foundAuthor = authorService.findById(id).block();
-
-        // if(foundAuthor.getName() != author.getName()){
-        //     foundAuthor.setName(author.getName());
-        //     return authorService.save(foundAuthor);
-        // }
-
-        return null;
-    }
-
-    @Override
     public Mono<Long> count() {
 
         return repository.count();

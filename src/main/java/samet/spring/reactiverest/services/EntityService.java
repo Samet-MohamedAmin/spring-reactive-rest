@@ -15,8 +15,6 @@ public interface EntityService<E extends BaseEntity, ID> {
     
     Flux<E> saveAll(Flux<E> entityStream);
 
-    Mono<E> updateName(ID id, E entity);
-
     Mono<Long> count();
 
 }
