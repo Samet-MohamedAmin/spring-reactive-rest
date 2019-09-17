@@ -7,7 +7,6 @@ public interface BaseEntity {
     void setId(String id);
 
     default boolean isIdEmpty(){
-        System.out.println(getId());
         if(getId() == null){
             return true;
         }

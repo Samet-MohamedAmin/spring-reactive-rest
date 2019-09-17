@@ -18,7 +18,9 @@ public class BookServiceImpl implements BookService {
     private AuthorBooksService authorBooksService;
     private EntityService<Book, String> service;
 
-    BookServiceImpl(BookRepository repository, AuthorBooksService authorBooksService) {
+    BookServiceImpl(
+            BookRepository repository,
+            AuthorBooksService authorBooksService) {
 
         this.repository = repository;
         this.authorBooksService = authorBooksService;
@@ -68,9 +70,16 @@ public class BookServiceImpl implements BookService {
         return service.count();
     }
 
+    /**
+     * 
+     * Adds author to book item and saves eventually the book item.
+     */
     @Override
     public Mono<Book> addAuthor(Book book, Author author) {
         
+        if(book.isIdEmpty()){
+            save(book).block();
+        }
         book.addAuthor(author);
         save(book).block();
         authorBooksService.addAuthor(author, book).block();
