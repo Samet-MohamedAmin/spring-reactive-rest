@@ -8,11 +8,11 @@
 [Book]-*[Author]
 [ItemStore]++-1[Book]
 [AuthorBooks]++-1[Author]
-[AuthorBooks]-*[Book]
+[AuthorBooks]<>-*[Book]
 [ShoppingCart]-++[Client]
 [Order]-++[Client]
 [Order]-*[Book]
-[ShoppingCart]-*[Book]
+[ShoppingCart]<>-*[Book]
 
 [AuthorBooks]-[note: added to avoid mongodb circular ref{bg:cornsilk}]
 
