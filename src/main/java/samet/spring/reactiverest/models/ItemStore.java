@@ -31,7 +31,7 @@ public class ItemStore implements BaseEntity {
         this.quantity += quantity;
     }
 
-    public void removeItem(Integer quantity) throws RuntimeException {
+    public void removeQuantity(Integer quantity) throws RuntimeException {
 
         Integer theQuantity = this.quantity - quantity;
         if(theQuantity < 0){
