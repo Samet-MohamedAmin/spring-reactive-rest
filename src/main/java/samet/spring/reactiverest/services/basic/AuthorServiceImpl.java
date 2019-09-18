@@ -40,29 +40,35 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Mono<Author> save(Author entity) {
 
-        if(entity.isIdEmpty()){
-            service.save(entity).block();
-            authorBooksService.save(AuthorBooks.builder().author(entity).build()).block();
+        var authorMono = service.save(entity);
+        if(entity.isIdEmpty()) {
+
+            return authorMono.flatMap(author -> {
+                return authorBooksService.save(AuthorBooks.builder().author(author).build()).flatMap(authorBooks -> {
+                    return Mono.just(authorBooks.getAuthor());
+                });
+            });
         }
-        else {
-            service.save(entity).block();
-        }
-        return Mono.just(entity);
+
+        return authorMono;
     }
 
     @Override
     public Flux<Author> saveAll(Flux<Author> entityStream) {
 
-        entityStream.subscribe(entity -> {
+        var authorStream = entityStream.flatMap(entity -> {
+            var authorMono = service.save(entity);
+            
             if(entity.isIdEmpty()) {
-                service.save(entity).block();
-                authorBooksService.save(AuthorBooks.builder().author(entity).build()).block();
+                return authorMono.flatMap(author -> {
+                    return authorBooksService.save(AuthorBooks.builder().author(author).build()).flatMap(authorBooks -> {
+                        return Mono.just(authorBooks.getAuthor());
+                    });
+                });
             }
-            else {
-                service.save(entity).block();
-            }
+            return authorMono;
         });
-        return entityStream;
+        return authorStream;
     }
 
     @Override

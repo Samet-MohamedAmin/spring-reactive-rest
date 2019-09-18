@@ -54,9 +54,18 @@ public class AuthorBooksServiceImpl implements AuthorBooksService {
     }
 
     @Override
-    public Mono<AuthorBooks> addAuthor(Author author, Book book) {
-        
-        var authorBooks = findByAuthor(author).block();
+    public Mono<AuthorBooks> addBook(Author author, Book book) {
+
+        return findByAuthor(author).flatMap(authorBooks -> {
+            authorBooks.addBook(book);
+            return save(authorBooks);
+        });
+    }
+
+
+    @Override
+    public Mono<AuthorBooks> addBook(AuthorBooks authorBooks, Book book) {
+
         authorBooks.addBook(book);
         return save(authorBooks);
     }

@@ -9,5 +9,7 @@ public interface AuthorBooksService extends EntityService<AuthorBooks, String> {
 
     Mono<AuthorBooks> findByAuthor(Author author);
 
-    Mono<AuthorBooks> addAuthor(Author author, Book book);
+    Mono<AuthorBooks> addBook(Author author, Book book);
+
+    Mono<AuthorBooks> addBook(AuthorBooks authorBooks, Book book);
 }

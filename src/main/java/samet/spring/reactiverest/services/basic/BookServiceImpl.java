@@ -82,7 +82,7 @@ public class BookServiceImpl implements BookService {
         }
         book.addAuthor(author);
         save(book).block();
-        authorBooksService.addAuthor(author, book).block();
+        authorBooksService.addBook(author, book).block();
         return Mono.just(book);
     }
 }
