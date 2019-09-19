@@ -6,7 +6,8 @@ public enum PathUtils {
     API_BASE_1("/api/v1"),
     API_BASE_2("/api/v2"),
     BOOKS("/books"),
-    AUTHORS("/authors");
+    AUTHORS("/authors"),
+    AUTHORBOOKS("/authorbooks");
 
     @Value("${server.port}")
     private static String port;

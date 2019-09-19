@@ -10,35 +10,33 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import samet.spring.reactiverest.config.handlers.AuthorBooksHandler;
 import samet.spring.reactiverest.config.handlers.AuthorHandler;
 import samet.spring.reactiverest.config.handlers.BookHandler;
 import samet.spring.reactiverest.config.handlers.Handler;
-import samet.spring.reactiverest.repositories.AuthorRepository;
-import samet.spring.reactiverest.repositories.BookRepository;
 
 
-
-
-
-/**
- * Created by jt on 8/29/17.
- */
 @Configuration
 public class WebConfig {
 
     private Handler bookHandler;
     private Handler authorHandler;
+    private Handler authorBooksHandler;
 
     @Autowired
-    WebConfig(Handler bookHandler, Handler authorHandler) {
+    WebConfig(
+                Handler bookHandler, 
+                Handler authorHandler,
+                Handler authorBooksHandler) {
 
         this.bookHandler = bookHandler;
         this.authorHandler = authorHandler;
+        this.authorBooksHandler = authorBooksHandler;
     }
 
 
     @Bean
-    RouterFunction<ServerResponse> authorRouter(AuthorRepository authorRepository) {
+    RouterFunction<ServerResponse> authorRouter() {
 
         final String authorUrl = Handler.getApiBase() + AuthorHandler.getEntityPath();
 
@@ -54,7 +52,7 @@ public class WebConfig {
     }
 
     @Bean
-    RouterFunction<ServerResponse> bookRouter(BookRepository bookRepository) {
+    RouterFunction<ServerResponse> bookRouter() {
 
         final String booksUrl = Handler.getApiBase() + BookHandler.getEntityPath();
 
@@ -66,6 +64,21 @@ public class WebConfig {
                     .POST(booksUrl, JSON, bookHandler::create)
                     .PUT(booksUrl + "/{id}", JSON, bookHandler::update)
                     // .PATCH(booksUrl + "/{id}", JSON, bookHandler::patch)
+                .build();
+    }
+
+    @Bean
+    RouterFunction<ServerResponse> authorBooksRouter() {
+
+        final String authorBooksUrl = Handler.getApiBase() + AuthorBooksHandler.getEntityPath();
+
+        final var JSON = accept(APPLICATION_JSON);
+
+        return RouterFunctions.route()
+                    .GET(authorBooksUrl, JSON, authorBooksHandler::list)
+                    .GET(authorBooksUrl + "/{id}", JSON, authorBooksHandler::getById)
+                    .PUT(authorBooksUrl + "/{id}", JSON, authorBooksHandler::update)
+                    // .PATCH(booksUrl + "/{id}", JSON, authorBooksHandler::patch)
                 .build();
     }
 }
