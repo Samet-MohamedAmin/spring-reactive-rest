@@ -7,20 +7,20 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import samet.spring.reactiverest.config.PathUtils;
 import samet.spring.reactiverest.models.Book;
-import samet.spring.reactiverest.repositories.BookRepository;
+import samet.spring.reactiverest.services.BookService;
 
 
 @Service
 public class BookHandler implements Handler {
 
 
-    private final BookRepository bookRepository;
+    private final BookService service;
     private Handler handler;
 
-    public BookHandler(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+    public BookHandler(BookService service) {
+        this.service = service;
 
-        this.handler = new EntityHandler<Book>(this.bookRepository,
+        this.handler = new EntityHandler<Book>(this.service,
                                 Book.class,
                                 getEntityPath());
     }

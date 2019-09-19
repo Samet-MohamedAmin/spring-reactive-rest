@@ -2,26 +2,26 @@ package samet.spring.reactiverest.config.handlers;
 
 import java.net.URI;
 
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 import reactor.core.publisher.Mono;
 import samet.spring.reactiverest.config.PathUtils;
 import samet.spring.reactiverest.models.BaseEntity;
+import samet.spring.reactiverest.services.EntityService;
 
 
 public class EntityHandler<E extends BaseEntity> implements Handler {
 
 
-    private ReactiveMongoRepository<E, String> entityRepository;
+    private EntityService<E, String> service;
     private Class<E> theClass;
     private String entityPath;
 
-    public EntityHandler(ReactiveMongoRepository<E, String> entityRepository,
+    public EntityHandler(EntityService<E, String> service,
                             Class<E> theClass,
                             String entityPath) {
-        this.entityRepository = entityRepository;
+        this.service = service;
         this.theClass = theClass;
         this.entityPath = entityPath;
     }
@@ -29,20 +29,20 @@ public class EntityHandler<E extends BaseEntity> implements Handler {
 
     public Mono<ServerResponse> list(ServerRequest request) {
 
-        return ServerResponse.ok().body(entityRepository.findAll(), theClass);
+        return ServerResponse.ok().body(service.findAll(), theClass);
     }
 
     public Mono<ServerResponse> getById(ServerRequest request){
 
         String id = request.pathVariable("id");
 
-        return ServerResponse.ok().body(entityRepository.findById(id), theClass);
+        return ServerResponse.ok().body(service.findById(id), theClass);
     }
 
     public Mono<ServerResponse> create(ServerRequest request){
 
         var authorStream = request.bodyToFlux(theClass);
-        var result = entityRepository.saveAll(authorStream).next();
+        var result = service.saveAll(authorStream).next();
         var authorUri = URI.create(
             PathUtils.getBaseUrl()
             + Handler.getApiBase()
@@ -60,7 +60,7 @@ public class EntityHandler<E extends BaseEntity> implements Handler {
                                     entity.setId(id);
                                     return Mono.just(entity);
                                 });
-        var result = entityRepository.saveAll(entityStream).next();
+        var result = service.saveAll(entityStream).next();
 
         return ServerResponse.accepted().body(result, theClass);
     }

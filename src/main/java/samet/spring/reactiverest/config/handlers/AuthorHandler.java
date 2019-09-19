@@ -7,20 +7,20 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 import samet.spring.reactiverest.config.PathUtils;
 import samet.spring.reactiverest.models.Author;
-import samet.spring.reactiverest.repositories.AuthorRepository;
+import samet.spring.reactiverest.services.AuthorService;
 
 
 @Service
 public class AuthorHandler implements Handler {
 
 
-    private final AuthorRepository authorRepository;
+    private final AuthorService service;
     private Handler handler;
 
-    public AuthorHandler(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
+    public AuthorHandler(AuthorService service) {
+        this.service = service;
 
-        this.handler = new EntityHandler<Author>(this.authorRepository,
+        this.handler = new EntityHandler<Author>(this.service,
                                 Author.class,
                                 getEntityPath());
     }
