@@ -10,7 +10,10 @@ public interface Handler {
 
     public Mono<ServerResponse> list(ServerRequest request);
     public Mono<ServerResponse> getById(ServerRequest request);
-    public Mono<ServerResponse> create(ServerRequest request);
+    default public Mono<ServerResponse> create(ServerRequest request) throws RuntimeException {
+
+        throw new RuntimeException("THIS METHOD SHOULD NOT BE CALLED");
+    };
     public Mono<ServerResponse> update(ServerRequest request);
     // public Mono<ServerResponse> patch(ServerRequest request);
 
