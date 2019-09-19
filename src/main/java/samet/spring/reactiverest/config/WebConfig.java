@@ -14,6 +14,7 @@ import samet.spring.reactiverest.config.handlers.AuthorBooksHandler;
 import samet.spring.reactiverest.config.handlers.AuthorHandler;
 import samet.spring.reactiverest.config.handlers.BookHandler;
 import samet.spring.reactiverest.config.handlers.Handler;
+import samet.spring.reactiverest.config.handlers.ItemStoreHandler;
 
 
 @Configuration
@@ -22,16 +23,19 @@ public class WebConfig {
     private Handler bookHandler;
     private Handler authorHandler;
     private Handler authorBooksHandler;
+    private Handler itemStoreHandler;
 
     @Autowired
     WebConfig(
                 Handler bookHandler, 
                 Handler authorHandler,
-                Handler authorBooksHandler) {
+                Handler authorBooksHandler,
+                Handler itemStoreHandler) {
 
         this.bookHandler = bookHandler;
         this.authorHandler = authorHandler;
         this.authorBooksHandler = authorBooksHandler;
+        this.itemStoreHandler = itemStoreHandler;
     }
 
 
@@ -79,6 +83,21 @@ public class WebConfig {
                     .GET(authorBooksUrl + "/{id}", JSON, authorBooksHandler::getById)
                     .PUT(authorBooksUrl + "/{id}", JSON, authorBooksHandler::update)
                     // .PATCH(booksUrl + "/{id}", JSON, authorBooksHandler::patch)
+                .build();
+    }
+
+    @Bean
+    RouterFunction<ServerResponse> itemStoreRouter() {
+
+        final String itemStoreUrl = Handler.getApiBase() + ItemStoreHandler.getEntityPath();
+
+        final var JSON = accept(APPLICATION_JSON);
+
+        return RouterFunctions.route()
+                    .GET(itemStoreUrl, JSON, itemStoreHandler::list)
+                    .GET(itemStoreUrl + "/{id}", JSON, itemStoreHandler::getById)
+                    .PUT(itemStoreUrl + "/{id}", JSON, itemStoreHandler::update)
+                    // .PATCH(booksUrl + "/{id}", JSON, itemStoreHandler::patch)
                 .build();
     }
 }
