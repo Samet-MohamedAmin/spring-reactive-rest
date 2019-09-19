@@ -16,9 +16,7 @@ import reactor.core.publisher.Mono;
 import samet.spring.reactiverest.models.Book;
 import samet.spring.reactiverest.services.BookService;
 
-/**
- * Created by jt on 12/24/17.
- */
+
 @RestController
 @RequestMapping("/api/v1/books")
 public class BookController {

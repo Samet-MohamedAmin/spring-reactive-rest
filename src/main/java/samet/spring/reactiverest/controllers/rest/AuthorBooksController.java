@@ -16,9 +16,7 @@ import samet.spring.reactiverest.models.Book;
 import samet.spring.reactiverest.services.AuthorBooksService;
 import samet.spring.reactiverest.services.AuthorService;
 
-/**
- * Created by jt on 12/24/17.
- */
+
 @RestController
 @RequestMapping("/api/v1/authorbooks")
 public class AuthorBooksController {

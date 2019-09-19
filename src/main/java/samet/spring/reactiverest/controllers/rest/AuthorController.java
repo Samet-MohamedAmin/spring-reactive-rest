@@ -16,9 +16,7 @@ import reactor.core.publisher.Mono;
 import samet.spring.reactiverest.models.Author;
 import samet.spring.reactiverest.services.AuthorService;
 
-/**
- * Created by jt on 12/24/17.
- */
+
 @RestController
 @RequestMapping("/api/v1/authors")
 public class AuthorController {

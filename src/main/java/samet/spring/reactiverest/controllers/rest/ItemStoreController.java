@@ -15,9 +15,7 @@ import samet.spring.reactiverest.models.ItemStore;
 import samet.spring.reactiverest.services.BookService;
 import samet.spring.reactiverest.services.ItemStoreService;
 
-/**
- * Created by jt on 12/24/17.
- */
+
 @RestController
 @RequestMapping("/api/v1/itemstore")
 public class ItemStoreController {
